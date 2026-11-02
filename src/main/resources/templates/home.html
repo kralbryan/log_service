@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Log Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f7fa;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        h2 {
+            margin: 0;
+            font-size: 24px;
+            color: #2c3e50;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .logout-btn {
+            background-color: #e74c3c;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .logout-btn:hover {
+            background-color: #c0392b;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        select {
+            padding: 6px 12px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            outline: none;
+            font-size: 14px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        th {
+            background-color: #34495e;
+            color: white;
+            text-transform: uppercase;
+            font-size: 13px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f6f9;
+        }
+
+        tr:hover {
+            background-color: #eaf1f8;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h2>Log Kayitlari</h2>
+    <a href="/logout" class="logout-btn">Logout</a>
+</div>
+
+<!-- Filtre -->
+<form method="get" action="/home">
+    <label for="filter">Filtrele:</label>
+    <select id="filter" name="filter" onchange="this.form.submit()">
+        <option value="" th:selected="${selectedFilter == null}">Tümü</option>
+        <option value="LoginSuccess" th:selected="${selectedFilter == 'LoginSuccess'}">Başarılı Girişler</option>
+        <option value="LoginFailed" th:selected="${selectedFilter == 'LoginFailed'}">Başarısız Giriş Denemeleri</option>
+        <option value="Logout" th:selected="${selectedFilter == 'Logout'}">Çıkışlar</option>
+        <option value="UserAlreadyExists" th:selected="${selectedFilter=='UserAlreadyExists'}">Zaten Kayıtlı</option>
+        <option value="UserRegistered" th:selected="${selectedFilter == 'UserRegistered'}">Kayıtlar</option>
+    </select>
+</form>
+
+<!-- Tablo -->
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Event</th>
+        <th>Kullanıcı</th>
+        <th>Açıklama</th>
+        <th>Tarih</th>
+        <th>Kaynak</th>
+    </tr>
+    <tr th:each="log : ${logs}">
+        <td th:text="${log.id}"></td>
+        <td th:text="${log.eventType}"></td>
+        <td th:text="${log.message}"></td>
+        <td th:text="${log.reason}"></td>
+        <td th:text="${log.timestamp}"></td>
+        <td th:text="${log.whichProducer}"></td>
+    </tr>
+</table>
+
+</body>
+</html>
